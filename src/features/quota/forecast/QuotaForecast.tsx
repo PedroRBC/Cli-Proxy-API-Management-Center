@@ -7,15 +7,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNow } from '@/hooks/useNow';
 import { useAuthStore } from '@/stores';
+import { usageHistoryApi } from '@/services/api';
 import type { AuthFileItem } from '@/types';
 import { normalizeAuthIndex } from '@/utils/authIndex';
 import { formatRelativeInstant } from '@/utils/quota/relativeTime';
-import {
-  listQuotaSamples,
-  listUsage,
-  openHistoryDb,
-  putQuotaSamples,
-} from '@/features/usage/historyDb';
+import { listQuotaSamples, openHistoryDb, putQuotaSamples } from '@/features/usage/historyDb';
 import type { ModelPrice, QuotaSample, UsageRow } from '@/features/usage/model';
 import { loadPriceLookup } from '@/features/usage/pricing';
 import { HISTORY_UPDATED_EVENT } from '@/features/usage/useUsageHistoryCollector';
@@ -90,9 +86,10 @@ export function QuotaForecast({ files, claudeQuota, codexQuota, keyFor }: Props)
     if (!apiBase || typeof indexedDB === 'undefined') return;
     const db = await openHistoryDb(apiBase);
     const since = Date.now() - 8 * 24 * HOUR_MS;
-    const [s, u] = await Promise.all([listQuotaSamples(db, since), listUsage(db, since)]);
+    const [s, history] = await Promise.all([listQuotaSamples(db, since), usageHistoryApi.list()]);
+    if (useAuthStore.getState().apiBase !== apiBase) return;
     setSamples(s);
-    setUsage(u);
+    setUsage(history.rows.filter((row) => row.hour >= since));
   }, [apiBase]);
 
   // The page's own quota reads become history.

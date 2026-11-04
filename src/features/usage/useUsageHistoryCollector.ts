@@ -1,5 +1,5 @@
 /**
- * Drains the server's usage queue into browser history while a panel tab is open.
+ * Drains quota observations from the usage queue while a panel tab is open.
  *
  * The queue keeps records for `redis-usage-queue-retention-seconds` (set to
  * 3600, its maximum), so a panel opened within that window catches up. A Web
@@ -10,8 +10,8 @@
 import { useEffect } from 'react';
 import { usageQueueApi } from '@/services/api';
 import { useAuthStore } from '@/stores';
-import { addLiveRows, openHistoryDb, putQuotaSamples } from './historyDb';
-import { aggregateQueueRecords, quotaSamplesFromRecord } from './model';
+import { openHistoryDb, putQuotaSamples } from './historyDb';
+import { quotaSamplesFromRecord } from './model';
 
 const POLL_MS = 60_000;
 const BATCH = 500;
@@ -26,7 +26,6 @@ async function drain(serverKey: string) {
     const records = await usageQueueApi.pop(BATCH);
     if (records.length === 0) break;
     // Persist each batch before popping the next so a failure loses at most one batch.
-    await addLiveRows(db, aggregateQueueRecords(records));
     await putQuotaSamples(db, records.flatMap(quotaSamplesFromRecord));
     total += records.length;
     if (records.length < BATCH) break;

@@ -1,11 +1,11 @@
 /**
- * Browser-side usage and quota history (IndexedDB), one database per server.
+ * Browser-side quota samples and preserved legacy usage, one database per server.
  *
- * shortcut: history lives in this browser profile only and grows only while a
- * panel tab is open; move it to the server when the backend gains a history API.
+ * Usage totals now come from the server. Existing browser rows remain untouched.
+ * shortcut: quota samples still need an open panel; move these when the backend has a quota API.
  */
 
-import { addCounts, type QuotaSample, type UsageRow, type UsageSource } from './model';
+import type { QuotaSample } from './model';
 
 const DB_VERSION = 1;
 const USAGE = 'usage';
@@ -46,40 +46,6 @@ export function openHistoryDb(serverKey: string): Promise<IDBDatabase> {
     dbs.set(name, pending);
   }
   return pending;
-}
-
-/** Replace every row of an imported source in one transaction, so re-imports never double count. */
-export async function replaceSource(db: IDBDatabase, source: UsageSource, rows: UsageRow[]) {
-  const tx = db.transaction(USAGE, 'readwrite');
-  const store = tx.objectStore(USAGE);
-  const keys = await request(store.index('source').getAllKeys(IDBKeyRange.only(source)));
-  keys.forEach((key) => store.delete(key));
-  rows.forEach((row) => store.put(row));
-  await done(tx);
-}
-
-/** Add freshly popped live records to their hourly buckets. */
-export async function addLiveRows(db: IDBDatabase, rows: UsageRow[]) {
-  if (rows.length === 0) return;
-  const tx = db.transaction(USAGE, 'readwrite');
-  const store = tx.objectStore(USAGE);
-  await Promise.all(
-    rows.map(async (row) => {
-      const prev = (await request(store.get(row.id))) as UsageRow | undefined;
-      store.put(prev ? addCounts(prev, row) : row);
-    })
-  );
-  await done(tx);
-}
-
-export async function listUsage(db: IDBDatabase, sinceMs: number): Promise<UsageRow[]> {
-  const store = db.transaction(USAGE).objectStore(USAGE);
-  return (await request(store.index('hour').getAll(IDBKeyRange.lowerBound(sinceMs)))) as UsageRow[];
-}
-
-export async function countSource(db: IDBDatabase, source: UsageSource): Promise<number> {
-  const store = db.transaction(USAGE).objectStore(USAGE);
-  return request(store.index('source').count(IDBKeyRange.only(source)));
 }
 
 export async function putQuotaSamples(db: IDBDatabase, samples: QuotaSample[]) {

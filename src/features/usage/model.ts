@@ -12,7 +12,7 @@ export const HOUR_MS = 3_600_000;
 export const DAY_MS = 24 * HOUR_MS;
 
 /**
- * live            rows collected from this server's usage queue by the panel
+ * live            rows persisted by this server before usage queue delivery
  * easycliproxyapi proxy history imported from the local EasyCLIProxyAPI app
  * agents          client transcript totals; overlaps proxy history, never summed with it
  */

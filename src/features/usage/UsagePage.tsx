@@ -1,13 +1,12 @@
 /**
- * Usage page: estimated API value of proxy traffic, from browser-kept history
- * (live queue collection plus imported history).
+ * Usage page: estimated API value of proxy traffic from server-kept history.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IconUpload } from '@/components/ui/icons';
 import { useAuthStore, useNotificationStore } from '@/stores';
-import { countSource, listUsage, openHistoryDb, replaceSource } from './historyDb';
+import { usageHistoryApi } from '@/services/api';
 import {
   DAY_MS,
   USAGE_RANGES,
@@ -75,6 +74,7 @@ export function UsagePage() {
   const [priceFor, setPriceFor] = useState<(model: string) => ModelPrice | null>(() => () => null);
   const [pricesReady, setPricesReady] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [importing, setImporting] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const loadRef = useRef(0);
@@ -90,30 +90,38 @@ export function UsagePage() {
   };
 
   const load = useCallback(async () => {
-    if (!apiBase || typeof indexedDB === 'undefined') {
+    if (!apiBase) {
       setLoading(false);
       return;
     }
     const requestId = ++loadRef.current;
     try {
-      const db = await openHistoryDb(apiBase);
-      const [list, imported] = await Promise.all([
-        listUsage(db, rangeStartMs(prefs.range, Date.now())),
-        countSource(db, 'easycliproxyapi'),
-      ]);
+      const { rows: history } = await usageHistoryApi.list();
       if (requestId !== loadRef.current) return;
-      setRows(list);
-      setImportedCount(imported);
+      setRows(history.filter((row) => row.hour >= rangeStartMs(prefs.range, Date.now())));
+      setImportedCount(history.filter((row) => row.source === 'easycliproxyapi').length);
+      setLoadError('');
+    } catch (err) {
+      if (requestId === loadRef.current) {
+        setLoadError(err instanceof Error ? err.message : String(err));
+      }
     } finally {
       if (requestId === loadRef.current) setLoading(false);
     }
   }, [apiBase, prefs.range]);
 
   useEffect(() => {
+    setRows([]);
+    setImportedCount(0);
     void load();
     const onUpdate = () => void load();
     window.addEventListener(HISTORY_UPDATED_EVENT, onUpdate);
-    return () => window.removeEventListener(HISTORY_UPDATED_EVENT, onUpdate);
+    const timer = window.setInterval(onUpdate, 60_000);
+    return () => {
+      loadRef.current += 1;
+      window.removeEventListener(HISTORY_UPDATED_EVENT, onUpdate);
+      window.clearInterval(timer);
+    };
   }, [load]);
 
   useEffect(() => {
@@ -178,10 +186,9 @@ export function UsagePage() {
     setImporting(true);
     try {
       if (file.size > MAX_IMPORT_BYTES) throw new Error(t('usage.import_too_large'));
-      const parsed = parseUsageImport(JSON.parse(await file.text()), Date.now());
-      const db = await openHistoryDb(apiBase);
-      await replaceSource(db, 'easycliproxyapi', parsed.proxy);
-      await replaceSource(db, 'agents', parsed.agents);
+      const document: unknown = JSON.parse(await file.text());
+      const parsed = parseUsageImport(document, Date.now());
+      await usageHistoryApi.import(document);
       const requests = parsed.proxy.reduce((sum, row) => sum + row.requests, 0);
       showNotification(t('usage.import_success', { count: requests }), 'success');
       await load();
@@ -235,6 +242,8 @@ export function UsagePage() {
           </button>
         </div>
       </header>
+
+      {loadError && <p role="alert">{t('usage.load_failed', { message: loadError })}</p>}
 
       <div className={styles.toolbar}>
         <Segmented

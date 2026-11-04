@@ -1,0 +1,17 @@
+/* Chart slot colors, validated with the dataviz palette checks for both surfaces.
+ * Light-mode contrast for slots 3-4 is below 3:1, so every chart ships a legend
+ * and a table view. */
+
+@mixin series-colors {
+  --series-codex: #2a78d6;
+  --series-claude: #eb6834;
+  --series-gemini: #1baf7a;
+  --series-other: #eda100;
+
+  :global([data-theme='dark']) & {
+    --series-codex: #3987e5;
+    --series-claude: #d95926;
+    --series-gemini: #199e70;
+    --series-other: #c98500;
+  }
+}

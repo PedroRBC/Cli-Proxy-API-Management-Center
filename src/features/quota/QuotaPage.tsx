@@ -26,6 +26,7 @@ import { ProviderTabs } from '@/features/authFiles/components/ProviderTabs';
 import { QuotaHeader } from './components/QuotaHeader';
 import { QuotaCard } from './components/QuotaCard';
 import { QuotaTimeline } from './components/QuotaTimeline';
+import { QuotaForecast } from './forecast/QuotaForecast';
 import {
   CARD_ENTRANCE_BUDGET_MS,
   QUOTA_PAGE_SIZE,
@@ -332,6 +333,13 @@ export function QuotaPage() {
         refreshing={loading || batchLoading}
         disableControls={disableControls}
         onRefreshAll={handleRefreshAll}
+      />
+
+      <QuotaForecast
+        files={files}
+        claudeQuota={claudeQuota}
+        codexQuota={codexQuota}
+        keyFor={getQuotaCacheKey}
       />
 
       <section className={styles.workbench}>

@@ -39,6 +39,7 @@ import { useModelDiscovery } from './useModelDiscovery';
 import { ModelDiscoveryPanel } from './ModelDiscoveryPanel';
 import { ConnectivityStatusIcon } from './ConnectivityStatusIcon';
 import { ApiKeyEntriesEditor } from './ApiKeyEntriesEditor';
+import { AllowedApiKeysEditor } from './AllowedApiKeysEditor';
 import { CheckboxField } from './CheckboxField';
 import { ModelEntriesEditor } from './ModelEntriesEditor';
 import styles from './sharedForm.module.scss';
@@ -49,6 +50,7 @@ import { readModelOptions, validateModelOptions } from '../../modelOptions';
 import { RuntimePolicyEditor } from './RuntimePolicyEditor';
 import { ProviderBehaviorEditor } from './ProviderBehaviorEditor';
 import { pickProviderBehavior } from '../../providerBehavior';
+import { validateAllowedApiKeys } from '../../allowedApiKeys';
 
 /** 模块级常量，免得每次渲染都给 picker 一个新数组引用。 */
 const DISABLE_ALL_RULES = [DISABLE_ALL_RULE];
@@ -83,7 +85,7 @@ const formatJsonObject = (value?: Record<string, unknown>): string => {
 
 const isClaudeLikeBrand = (brand: ProviderBrand): boolean => brand === 'claude';
 
-function buildInitialForm(
+export function buildInitialForm(
   brand: ProviderBrand,
   resource: ProviderResource | null,
   mode: 'create' | 'edit'
@@ -126,6 +128,7 @@ function buildInitialForm(
           ? ''
           : undefined,
       apiKeyEntries: brand === 'openaiCompatibility' ? [emptyApiKeyEntry()] : undefined,
+      allowedApiKeys: brand === 'openaiCompatibility' ? [] : undefined,
     };
   }
 
@@ -169,6 +172,7 @@ function buildInitialForm(
             authIndex: entry.authIndex,
           }))
         : [emptyApiKeyEntry()],
+      allowedApiKeys: cfg.allowedApiKeys ?? [],
     };
   }
 
@@ -410,6 +414,15 @@ export function BaseProviderForm({
     if (descriptor.baseUrlRequired && !form.baseUrl.trim()) {
       return t('providersPage.form.validation.baseUrlRequired');
     }
+    if (brand === 'openaiCompatibility') {
+      const allowedApiKeysError = validateAllowedApiKeys(form.allowedApiKeys ?? []);
+      if (allowedApiKeysError === 'blank') {
+        return t('providersPage.form.validation.allowedApiKeyBlank');
+      }
+      if (allowedApiKeysError === 'duplicate') {
+        return t('providersPage.form.validation.allowedApiKeyDuplicate');
+      }
+    }
     const weights = [
       ...(brand === 'openaiCompatibility'
         ? (form.apiKeyEntries ?? []).map((entry) => entry.weight)
@@ -489,6 +502,9 @@ export function BaseProviderForm({
         ? 'unavailable'
         : 'ready';
   const actualApiKeyEntries = form.apiKeyEntries ?? [];
+  const allowedApiKeys = form.allowedApiKeys ?? [];
+  const allowedApiKeysValidationError =
+    brand === 'openaiCompatibility' ? validateAllowedApiKeys(allowedApiKeys) : null;
   const supportsModelImage = brand === 'openaiCompatibility';
   const singleConnectivity =
     brand === 'codex' || brand === 'meta' || brand === 'xai'
@@ -795,6 +811,25 @@ export function BaseProviderForm({
             }
             onTest={(idx) => void connectivity.runOpenAIKey(idx)}
             onTestAll={() => void connectivity.runOpenAIAllKeys()}
+          />
+        </Collapsible>
+      ) : null}
+
+      {descriptor.supportsAllowedApiKeys ? (
+        <Collapsible
+          label={t('providersPage.form.allowedApiKeysSection')}
+          hint={
+            allowedApiKeys.length > 0
+              ? t('providersPage.form.allowedApiKeysRestricted', { count: allowedApiKeys.length })
+              : t('providersPage.form.allowedApiKeysGlobal')
+          }
+          defaultOpen
+        >
+          <AllowedApiKeysEditor
+            values={allowedApiKeys}
+            mutating={mutating}
+            validationError={allowedApiKeysValidationError}
+            onChange={(values) => updateField('allowedApiKeys', values)}
           />
         </Collapsible>
       ) : null}

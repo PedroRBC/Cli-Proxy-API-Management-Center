@@ -43,6 +43,7 @@ import type {
   SponsorProviderBrand,
   SponsorProviderRaw,
 } from './types';
+import { normalizeAllowedApiKeys } from './allowedApiKeys';
 import {
   buildApiKeyFunRaw,
   isApiKeyFunClaudeProvider,
@@ -203,7 +204,7 @@ export const buildProviderKeyConfig = (
   return next;
 };
 
-const buildOpenAIConfig = (
+export const buildOpenAIConfig = (
   input: ProviderEntryFormInput,
   existing?: OpenAIProviderConfig | null
 ): OpenAIProviderConfig => {
@@ -223,6 +224,7 @@ const buildOpenAIConfig = (
         };
       })
       .filter((entry) => entry.apiKey) ?? [];
+  const allowedApiKeys = normalizeAllowedApiKeys(input.allowedApiKeys ?? []);
 
   return {
     ...(existing ?? {}),
@@ -230,6 +232,7 @@ const buildOpenAIConfig = (
     baseUrl: input.baseUrl.trim(),
     prefix: input.prefix.trim() || undefined,
     apiKeyEntries,
+    allowedApiKeys,
     disabled: input.disabled,
     ...pickProviderBehavior(input, 'openaiCompatibility'),
     disableCooling: input.disableCooling,

@@ -18,6 +18,7 @@ export interface ProviderDescriptor {
   supportsWebsockets: boolean;
   supportsCloak: boolean;
   supportsApiKeyEntries: boolean;
+  supportsAllowedApiKeys?: boolean;
   /** Sheet 默认宽度 */
   sheetSize: 'md' | 'lg' | 'xl';
 }
@@ -181,6 +182,7 @@ export const PROVIDER_DESCRIPTORS: Record<ProviderBrand, ProviderDescriptor> = {
     supportsWebsockets: false,
     supportsCloak: false,
     supportsApiKeyEntries: true,
+    supportsAllowedApiKeys: true,
     sheetSize: 'lg',
   },
   apikeyFun: {

@@ -108,6 +108,7 @@ export interface OpenAIProviderConfig extends ProviderRuntimePolicy, ProviderBeh
   prefix?: string;
   baseUrl: string;
   apiKeyEntries: ApiKeyEntry[];
+  allowedApiKeys?: string[];
   disabled?: boolean;
   headers?: Record<string, string>;
   models?: ModelAlias[];

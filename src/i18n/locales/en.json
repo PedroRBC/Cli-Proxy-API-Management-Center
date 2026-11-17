@@ -2351,6 +2351,16 @@
       "cloakStrict": "Strict mode",
       "cloakSensitiveWords": "Sensitive words (one per line)",
       "apiKeyEntriesSection": "API key entries",
+      "allowedApiKeysSection": "Allowed API keys",
+      "allowedApiKeysHint": "CLIProxy client keys allowed to access this provider. These are separate from upstream API key entries.",
+      "allowedApiKeysGlobal": "Global access (no restriction)",
+      "allowedApiKeysRestricted": "Restricted to {{count}} client key(s)",
+      "allowedApiKey": "Client key #{{index}}",
+      "allowedApiKeyPlaceholder": "Enter a CLIProxy client key",
+      "showAllowedApiKey": "Show client key",
+      "hideAllowedApiKey": "Hide client key",
+      "removeAllowedApiKey": "Remove client key #{{index}}",
+      "addAllowedApiKey": "Add client key",
       "apiKeyEntry": "Key #{{index}}",
       "addApiKeyEntry": "Add key entry",
       "showApiKey": "Show API key",
@@ -2387,7 +2397,9 @@
         "apiKeyRequired": "At least one API key is required",
         "baseUrlRequired": "Base URL is required",
         "weightInteger": "Scheduling weight must be an integer",
-        "weightMax": "Scheduling weight cannot exceed {{max}}"
+        "weightMax": "Scheduling weight cannot exceed {{max}}",
+        "allowedApiKeyBlank": "A client key cannot be blank",
+        "allowedApiKeyDuplicate": "Each client key must be unique"
       }
     },
     "delete": {

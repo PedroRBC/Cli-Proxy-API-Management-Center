@@ -2377,6 +2377,16 @@
       "cloakStrict": "嚴格模式",
       "cloakSensitiveWords": "敏感詞(每行一個)",
       "apiKeyEntriesSection": "API 金鑰條目",
+      "allowedApiKeysSection": "允許的 API 金鑰",
+      "allowedApiKeysHint": "允許存取此提供商的 CLIProxy 用戶端金鑰。它們與上游 API 金鑰條目分開。",
+      "allowedApiKeysGlobal": "全域存取（不限制）",
+      "allowedApiKeysRestricted": "限制為 {{count}} 個用戶端金鑰",
+      "allowedApiKey": "用戶端金鑰 #{{index}}",
+      "allowedApiKeyPlaceholder": "輸入 CLIProxy 用戶端金鑰",
+      "showAllowedApiKey": "顯示用戶端金鑰",
+      "hideAllowedApiKey": "隱藏用戶端金鑰",
+      "removeAllowedApiKey": "移除用戶端金鑰 #{{index}}",
+      "addAllowedApiKey": "新增用戶端金鑰",
       "apiKeyEntry": "金鑰 #{{index}}",
       "addApiKeyEntry": "新增金鑰條目",
       "showApiKey": "顯示金鑰",
@@ -2413,7 +2423,9 @@
         "apiKeyRequired": "至少填寫一個 API 金鑰",
         "baseUrlRequired": "服務位址必填",
         "weightInteger": "調度權重必須是整數",
-        "weightMax": "調度權重不能超過 {{max}}"
+        "weightMax": "調度權重不能超過 {{max}}",
+        "allowedApiKeyBlank": "用戶端金鑰不能為空白",
+        "allowedApiKeyDuplicate": "用戶端金鑰必須唯一"
       }
     },
     "delete": {

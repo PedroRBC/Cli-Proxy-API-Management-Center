@@ -2351,6 +2351,16 @@
       "cloakStrict": "엄격 모드",
       "cloakSensitiveWords": "민감한 단어 (한 줄에 하나씩)",
       "apiKeyEntriesSection": "API 키 항목",
+      "allowedApiKeysSection": "허용된 API 키",
+      "allowedApiKeysHint": "이 제공업체에 접근할 수 있는 CLIProxy 클라이언트 키입니다. 업스트림 API 키 항목과는 별개입니다.",
+      "allowedApiKeysGlobal": "전체 액세스(제한 없음)",
+      "allowedApiKeysRestricted": "클라이언트 키 {{count}}개로 제한",
+      "allowedApiKey": "클라이언트 키 #{{index}}",
+      "allowedApiKeyPlaceholder": "CLIProxy 클라이언트 키 입력",
+      "showAllowedApiKey": "클라이언트 키 표시",
+      "hideAllowedApiKey": "클라이언트 키 숨기기",
+      "removeAllowedApiKey": "클라이언트 키 #{{index}} 제거",
+      "addAllowedApiKey": "클라이언트 키 추가",
       "apiKeyEntry": "키 #{{index}}",
       "addApiKeyEntry": "키 항목 추가",
       "showApiKey": "API 키 표시",
@@ -2387,7 +2397,9 @@
         "apiKeyRequired": "API 키를 하나 이상 입력해야 합니다.",
         "baseUrlRequired": "기본 URL은 필수입니다.",
         "weightInteger": "스케줄링 가중치는 정수여야 합니다.",
-        "weightMax": "스케줄링 가중치는 {{max}}을(를) 초과할 수 없습니다."
+        "weightMax": "스케줄링 가중치는 {{max}}을(를) 초과할 수 없습니다.",
+        "allowedApiKeyBlank": "클라이언트 키는 비워 둘 수 없습니다",
+        "allowedApiKeyDuplicate": "클라이언트 키는 중복될 수 없습니다"
       }
     },
     "delete": {

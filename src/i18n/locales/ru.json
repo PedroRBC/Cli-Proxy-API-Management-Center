@@ -2345,6 +2345,16 @@
       "cloakStrict": "Строгий режим",
       "cloakSensitiveWords": "Стоп-слова (по одному в строке)",
       "apiKeyEntriesSection": "API-ключи",
+      "allowedApiKeysSection": "Разрешённые API-ключи",
+      "allowedApiKeysHint": "Ключи клиентов CLIProxy, которым разрешён доступ к этому провайдеру. Они отделены от ключей API upstream.",
+      "allowedApiKeysGlobal": "Глобальный доступ (без ограничений)",
+      "allowedApiKeysRestricted": "Ограничено ключами клиентов: {{count}}",
+      "allowedApiKey": "Ключ клиента №{{index}}",
+      "allowedApiKeyPlaceholder": "Введите ключ клиента CLIProxy",
+      "showAllowedApiKey": "Показать ключ клиента",
+      "hideAllowedApiKey": "Скрыть ключ клиента",
+      "removeAllowedApiKey": "Удалить ключ клиента №{{index}}",
+      "addAllowedApiKey": "Добавить ключ клиента",
       "apiKeyEntry": "Ключ #{{index}}",
       "addApiKeyEntry": "Добавить ключ",
       "showApiKey": "Показать ключ API",
@@ -2381,7 +2391,9 @@
         "apiKeyRequired": "Нужен хотя бы один API-ключ",
         "baseUrlRequired": "Base URL обязателен",
         "weightInteger": "Вес планирования должен быть целым числом",
-        "weightMax": "Вес планирования не может превышать {{max}}"
+        "weightMax": "Вес планирования не может превышать {{max}}",
+        "allowedApiKeyBlank": "Ключ клиента не может быть пустым",
+        "allowedApiKeyDuplicate": "Ключи клиентов должны быть уникальными"
       }
     },
     "delete": {

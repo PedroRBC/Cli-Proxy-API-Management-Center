@@ -2349,6 +2349,16 @@
       "cloakStrict": "严格模式",
       "cloakSensitiveWords": "敏感词(每行一个)",
       "apiKeyEntriesSection": "API 密钥条目",
+      "allowedApiKeysSection": "允许的 API 密钥",
+      "allowedApiKeysHint": "允许访问此提供商的 CLIProxy 客户端密钥。它们与上游 API 密钥条目分开。",
+      "allowedApiKeysGlobal": "全局访问（不限制）",
+      "allowedApiKeysRestricted": "限制为 {{count}} 个客户端密钥",
+      "allowedApiKey": "客户端密钥 #{{index}}",
+      "allowedApiKeyPlaceholder": "输入 CLIProxy 客户端密钥",
+      "showAllowedApiKey": "显示客户端密钥",
+      "hideAllowedApiKey": "隐藏客户端密钥",
+      "removeAllowedApiKey": "移除客户端密钥 #{{index}}",
+      "addAllowedApiKey": "添加客户端密钥",
       "apiKeyEntry": "密钥 #{{index}}",
       "addApiKeyEntry": "添加密钥条目",
       "showApiKey": "显示密钥",
@@ -2385,7 +2395,9 @@
         "apiKeyRequired": "至少填写一个 API 密钥",
         "baseUrlRequired": "服务地址必填",
         "weightInteger": "调度权重必须是整数",
-        "weightMax": "调度权重不能超过 {{max}}"
+        "weightMax": "调度权重不能超过 {{max}}",
+        "allowedApiKeyBlank": "客户端密钥不能为空",
+        "allowedApiKeyDuplicate": "客户端密钥必须唯一"
       }
     },
     "delete": {

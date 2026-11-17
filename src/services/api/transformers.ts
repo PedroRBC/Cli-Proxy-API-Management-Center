@@ -291,6 +291,10 @@ const normalizeOpenAIProvider = (
   const headers = normalizeHeaders(provider.headers);
   const models = normalizeModelAliases(provider.models);
   const priority = provider.priority;
+  const rawAllowedApiKeys = provider['allowed-api-keys'];
+  const allowedApiKeys = Array.isArray(rawAllowedApiKeys)
+    ? rawAllowedApiKeys.map((value: unknown) => String(value).trim()).filter(Boolean)
+    : undefined;
 
   const result: OpenAIProviderConfig = {
     name: String(name),
@@ -298,6 +302,7 @@ const normalizeOpenAIProvider = (
     apiKeyEntries,
     ...normalizeRuntimePolicy(provider),
   };
+  if (allowedApiKeys !== undefined) result.allowedApiKeys = allowedApiKeys;
 
   const supportPromptCacheKey = normalizeBoolean(provider['support-prompt-cache-key']);
   if (supportPromptCacheKey !== undefined) result.supportPromptCacheKey = supportPromptCacheKey;

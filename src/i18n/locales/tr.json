@@ -2351,6 +2351,16 @@
       "cloakStrict": "Sıkı Mod",
       "cloakSensitiveWords": "Hassas Sözcükler (Satır Başına Bir)",
       "apiKeyEntriesSection": "API Anahtarı Girdileri",
+      "allowedApiKeysSection": "İzin verilen API anahtarları",
+      "allowedApiKeysHint": "Bu sağlayıcıya erişebilen CLIProxy istemci anahtarlarıdır. Upstream API anahtarı girdilerinden ayrıdır.",
+      "allowedApiKeysGlobal": "Genel erişim (kısıtlama yok)",
+      "allowedApiKeysRestricted": "{{count}} istemci anahtarıyla sınırlı",
+      "allowedApiKey": "İstemci anahtarı #{{index}}",
+      "allowedApiKeyPlaceholder": "Bir CLIProxy istemci anahtarı girin",
+      "showAllowedApiKey": "İstemci anahtarını göster",
+      "hideAllowedApiKey": "İstemci anahtarını gizle",
+      "removeAllowedApiKey": "İstemci anahtarı #{{index}} kaldır",
+      "addAllowedApiKey": "İstemci anahtarı ekle",
       "apiKeyEntry": "Anahtar #{{index}}",
       "addApiKeyEntry": "Anahtar Girdisi Ekle",
       "showApiKey": "API Anahtarını Göster",
@@ -2387,7 +2397,9 @@
         "apiKeyRequired": "En Az Bir API Anahtarı Zorunlu",
         "baseUrlRequired": "Temel URL Zorunlu",
         "weightInteger": "Zamanlama Ağırlığı Tam Sayı Olmalıdır",
-        "weightMax": "Zamanlama Ağırlığı {{max}} Değerini Aşamaz"
+        "weightMax": "Zamanlama Ağırlığı {{max}} Değerini Aşamaz",
+        "allowedApiKeyBlank": "İstemci anahtarı boş bırakılamaz",
+        "allowedApiKeyDuplicate": "İstemci anahtarları benzersiz olmalıdır"
       }
     },
     "delete": {

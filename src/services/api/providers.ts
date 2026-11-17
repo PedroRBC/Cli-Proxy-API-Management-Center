@@ -191,7 +191,7 @@ const serializeGeminiKey = (config: GeminiKeyConfig) => {
   return payload;
 };
 
-const serializeOpenAIProvider = (provider: OpenAIProviderConfig) => {
+export const serializeOpenAIProvider = (provider: OpenAIProviderConfig) => {
   const payload: Record<string, unknown> = {
     name: provider.name,
     'base-url': provider.baseUrl,
@@ -208,6 +208,9 @@ const serializeOpenAIProvider = (provider: OpenAIProviderConfig) => {
   if (headers) payload.headers = headers;
   const models = serializeModelAliases(provider.models, true);
   if (models && models.length) payload.models = models;
+  if (Array.isArray(provider.allowedApiKeys)) {
+    payload['allowed-api-keys'] = provider.allowedApiKeys;
+  }
   if (provider.priority !== undefined) payload.priority = provider.priority;
   if (provider.disableCooling !== undefined) payload['disable-cooling'] = provider.disableCooling;
   return payload;

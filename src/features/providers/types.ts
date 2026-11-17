@@ -217,6 +217,8 @@ export interface ProviderEntryFormInput extends ProviderBehaviorOptions {
   /** Temporary selection for connectivity tests only; never persisted in backend config. */
   testModel?: string;
   apiKeyEntries?: ApiKeyEntryInput[];
+  /** CLIProxy client keys allowed to access this OpenAI-compatible provider. */
+  allowedApiKeys?: string[];
   /** APIKEY.FUN stores one grouped key per platform protocol. */
   sponsorKeyEntries?: SponsorKeyEntryInput[];
 }
